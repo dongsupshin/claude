@@ -1,0 +1,162 @@
+<UserControl x:Class="FocusGuard.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:FocusGuard.ViewModels"
+             d:DataContext="{d:DesignInstance vm:SettingsViewModel}"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <!-- Styled TextBox -->
+        <Style x:Key="NumericInput" TargetType="TextBox">
+            <Setter Property="Background" Value="#1E1E2E"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#374151"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Width" Value="70"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="CaretBrush" Value="White"/>
+        </Style>
+
+        <Style x:Key="ToggleSwitch" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="#E5E7EB"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="SectionTitle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#A78BFA"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,20,0,12"/>
+        </Style>
+
+        <Style x:Key="SettingLabel" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#D1D5DB"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Width" Value="220"/>
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="10">
+
+            <TextBlock Text="Settings" FontSize="24" FontWeight="SemiBold" Foreground="White" Margin="0,0,0,8"/>
+            <TextBlock Text="Customize your focus and eye care experience" Foreground="#9CA3AF" FontSize="13" Margin="0,0,0,10"/>
+
+            <!-- Pomodoro Timer Settings -->
+            <Border Background="#1E1E2E" CornerRadius="12" Padding="24,16" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="⏱ Pomodoro Timer" Style="{StaticResource SectionTitle}" Margin="0,0,0,12"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,6">
+                        <TextBlock Text="Work Duration (minutes)" Style="{StaticResource SettingLabel}"/>
+                        <TextBox Text="{Binding WorkMinutes, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericInput}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,6">
+                        <TextBlock Text="Short Break (minutes)" Style="{StaticResource SettingLabel}"/>
+                        <TextBox Text="{Binding ShortBreakMinutes, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericInput}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,6">
+                        <TextBlock Text="Long Break (minutes)" Style="{StaticResource SettingLabel}"/>
+                        <TextBox Text="{Binding LongBreakMinutes, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericInput}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,6">
+                        <TextBlock Text="Sessions Before Long Break" Style="{StaticResource SettingLabel}"/>
+                        <TextBox Text="{Binding SessionsBeforeLongBreak, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericInput}"/>
+                    </StackPanel>
+
+                    <CheckBox Content="Auto-start breaks after work session" Style="{StaticResource ToggleSwitch}"
+                              IsChecked="{Binding AutoStartBreaks}" Margin="0,10,0,4"/>
+                    <CheckBox Content="Auto-start work after break" Style="{StaticResource ToggleSwitch}"
+                              IsChecked="{Binding AutoStartWork}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Eye Care Settings -->
+            <Border Background="#1E1E2E" CornerRadius="12" Padding="24,16" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="👁 Eye Care (20-20-20 Rule)" Style="{StaticResource SectionTitle}" Margin="0,0,0,12"/>
+
+                    <CheckBox Content="Enable Eye Care Reminders" Style="{StaticResource ToggleSwitch}"
+                              IsChecked="{Binding EyeCareEnabled}" Margin="0,0,0,8"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,6">
+                        <TextBlock Text="Reminder Interval (minutes)" Style="{StaticResource SettingLabel}"/>
+                        <TextBox Text="{Binding EyeCareIntervalMinutes, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericInput}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,6">
+                        <TextBlock Text="Look-away Duration (seconds)" Style="{StaticResource SettingLabel}"/>
+                        <TextBox Text="{Binding EyeCareDurationSeconds, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericInput}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Notification Settings -->
+            <Border Background="#1E1E2E" CornerRadius="12" Padding="24,16" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="🔔 Notifications" Style="{StaticResource SectionTitle}" Margin="0,0,0,12"/>
+                    <CheckBox Content="Enable Sound Effects" Style="{StaticResource ToggleSwitch}"
+                              IsChecked="{Binding SoundEnabled}"/>
+                    <CheckBox Content="Enable Toast Notifications" Style="{StaticResource ToggleSwitch}"
+                              IsChecked="{Binding ToastNotificationsEnabled}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- General Settings -->
+            <Border Background="#1E1E2E" CornerRadius="12" Padding="24,16" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="⚙ General" Style="{StaticResource SectionTitle}" Margin="0,0,0,12"/>
+                    <CheckBox Content="Start Minimized" Style="{StaticResource ToggleSwitch}"
+                              IsChecked="{Binding StartMinimized}"/>
+                    <CheckBox Content="Minimize to System Tray" Style="{StaticResource ToggleSwitch}"
+                              IsChecked="{Binding MinimizeToTray}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Action Buttons -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,20">
+                <Button Command="{Binding ResetDefaultsCommand}" Cursor="Hand" Margin="0,0,12,0">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="#374151" CornerRadius="8" Padding="20,10"
+                                    x:Name="border" Cursor="Hand">
+                                <TextBlock Text="Reset Defaults" Foreground="#D1D5DB" FontSize="14"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#4B5563"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Command="{Binding SaveCommand}" Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="#6366F1" CornerRadius="8" Padding="24,10"
+                                    x:Name="border" Cursor="Hand">
+                                <TextBlock Text="Save Settings" Foreground="White" FontSize="14" FontWeight="SemiBold"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#818CF8"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

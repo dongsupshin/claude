@@ -1,0 +1,170 @@
+<UserControl x:Class="FocusGuard.Views.StatsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:FocusGuard.ViewModels"
+             xmlns:conv="clr-namespace:FocusGuard.Converters"
+             d:DataContext="{d:DesignInstance vm:StatsViewModel}"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <conv:RatioToHeightConverter x:Key="RatioToHeightConverter"/>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="10">
+
+            <!-- Header -->
+            <Grid Margin="0,0,0,24">
+                <TextBlock Text="Your Focus Statistics" FontSize="24" FontWeight="SemiBold" Foreground="White"/>
+                <Button Command="{Binding RefreshCommand}" HorizontalAlignment="Right"
+                        ToolTip="Refresh" Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="#374151" CornerRadius="8" Padding="12,8"
+                                    x:Name="border" Cursor="Hand">
+                                <TextBlock Text="↻ Refresh" Foreground="#D1D5DB" FontSize="13"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#4B5563"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+
+            <!-- Summary Cards -->
+            <UniformGrid Rows="1" Columns="4" Margin="0,0,0,24">
+                <Border Background="#1E1E2E" CornerRadius="12" Padding="20,16" Margin="0,0,8,0">
+                    <StackPanel>
+                        <TextBlock Text="Total Sessions" Foreground="#9CA3AF" FontSize="12"/>
+                        <TextBlock Text="{Binding TotalSessions}" Foreground="White" FontSize="32"
+                                   FontWeight="Bold" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Border>
+                <Border Background="#1E1E2E" CornerRadius="12" Padding="20,16" Margin="4,0">
+                    <StackPanel>
+                        <TextBlock Text="Completed" Foreground="#9CA3AF" FontSize="12"/>
+                        <TextBlock Text="{Binding CompletedSessions}" Foreground="#10B981" FontSize="32"
+                                   FontWeight="Bold" Margin="0,4,0,0"/>
+                        <TextBlock Text="{Binding CompletionRate}" Foreground="#6EE7B7" FontSize="13"/>
+                    </StackPanel>
+                </Border>
+                <Border Background="#1E1E2E" CornerRadius="12" Padding="20,16" Margin="4,0">
+                    <StackPanel>
+                        <TextBlock Text="Focus Time" Foreground="#9CA3AF" FontSize="12"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <TextBlock Text="{Binding TotalMinutes}" Foreground="#6366F1" FontSize="32" FontWeight="Bold"/>
+                            <TextBlock Text=" min" Foreground="#818CF8" FontSize="14" VerticalAlignment="Bottom" Margin="0,0,0,6"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                <Border Background="#1E1E2E" CornerRadius="12" Padding="20,16" Margin="8,0,0,0">
+                    <StackPanel>
+                        <TextBlock Text="Current Streak" Foreground="#9CA3AF" FontSize="12"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <TextBlock Text="{Binding CurrentStreak}" Foreground="#F59E0B" FontSize="32" FontWeight="Bold"/>
+                            <TextBlock Text=" days" Foreground="#FBBF24" FontSize="14" VerticalAlignment="Bottom" Margin="0,0,0,6"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+
+            <!-- Weekly Focus Minutes Chart -->
+            <Border Background="#1E1E2E" CornerRadius="12" Padding="20" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="Focus Minutes — Last 7 Days" Foreground="#E5E7EB" FontSize="16"
+                               FontWeight="SemiBold" Margin="0,0,0,16"/>
+                    <ItemsControl ItemsSource="{Binding FocusBars}" Height="180">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Rows="1"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="4,0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Grid.Row="0" Text="{Binding DisplayValue}"
+                                               Foreground="#A5B4FC" FontSize="11"
+                                               HorizontalAlignment="Center" Margin="0,0,0,4"/>
+                                    <Border Grid.Row="1" Background="#2A2A3E" CornerRadius="4"
+                                            VerticalAlignment="Stretch">
+                                        <Border Background="#6366F1" CornerRadius="4"
+                                                VerticalAlignment="Bottom"
+                                                Height="{Binding HeightRatio,
+                                                    Converter={StaticResource RatioToHeightConverter},
+                                                    ConverterParameter=140}"/>
+                                    </Border>
+                                    <TextBlock Grid.Row="2" Text="{Binding Label}"
+                                               Foreground="#9CA3AF" FontSize="11"
+                                               HorizontalAlignment="Center" Margin="0,6,0,0"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <!-- Weekly Sessions Chart -->
+            <Border Background="#1E1E2E" CornerRadius="12" Padding="20" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="Completed Sessions — Last 7 Days" Foreground="#E5E7EB" FontSize="16"
+                               FontWeight="SemiBold" Margin="0,0,0,16"/>
+                    <ItemsControl ItemsSource="{Binding SessionBars}" Height="180">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Rows="1"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="4,0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Grid.Row="0" Text="{Binding DisplayValue}"
+                                               Foreground="#6EE7B7" FontSize="11"
+                                               HorizontalAlignment="Center" Margin="0,0,0,4"/>
+                                    <Border Grid.Row="1" Background="#2A2A3E" CornerRadius="4"
+                                            VerticalAlignment="Stretch">
+                                        <Border Background="#10B981" CornerRadius="4"
+                                                VerticalAlignment="Bottom"
+                                                Height="{Binding HeightRatio,
+                                                    Converter={StaticResource RatioToHeightConverter},
+                                                    ConverterParameter=140}"/>
+                                    </Border>
+                                    <TextBlock Grid.Row="2" Text="{Binding Label}"
+                                               Foreground="#9CA3AF" FontSize="11"
+                                               HorizontalAlignment="Center" Margin="0,6,0,0"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <!-- Tips -->
+            <Border Background="#1B2838" CornerRadius="12" Padding="20" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="💡 Focus Tips" Foreground="#60A5FA" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                    <TextBlock TextWrapping="Wrap" Foreground="#9CA3AF" FontSize="13" LineHeight="22">
+                        • Keep your workspace clean and distraction-free during focus sessions.
+                        • The 20-20-20 rule helps reduce eye strain: every 20 minutes, look at something 20 feet away for 20 seconds.
+                        • Try to maintain a consistent daily focus schedule to build a habit.
+                        • Stay hydrated — take a sip of water during each break!
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

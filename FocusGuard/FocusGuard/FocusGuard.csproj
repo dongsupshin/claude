@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+
+    <AssemblyName>FocusGuard</AssemblyName>
+    <RootNamespace>FocusGuard</RootNamespace>
+    <Version>1.0.0</Version>
+    <Authors>FocusGuard Team</Authors>
+    <Description>Smart Focus Timer &amp; Eye Care - Stay productive and protect your eyes</Description>
+    <Copyright>Copyright © 2026 FocusGuard</Copyright>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+
+</Project>

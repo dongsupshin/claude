@@ -1,0 +1,126 @@
+<Window x:Class="FocusGuard.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:FocusGuard.ViewModels"
+        xmlns:views="clr-namespace:FocusGuard.Views"
+        xmlns:conv="clr-namespace:FocusGuard.Converters"
+        Title="FocusGuard — Focus Timer &amp; Eye Care"
+        Width="900" Height="620" MinWidth="750" MinHeight="500"
+        WindowStartupLocation="CenterScreen"
+        Background="#111827"
+        Foreground="White">
+
+    <Window.Resources>
+        <conv:EqualityConverter x:Key="EqualityConv"/>
+
+        <!-- Sidebar Button Style -->
+        <Style x:Key="NavButton" TargetType="RadioButton">
+            <Setter Property="Foreground" Value="#9CA3AF"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="16,12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="GroupName" Value="Nav"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="border" Background="Transparent" CornerRadius="10"
+                                Padding="{TemplateBinding Padding}" Margin="4,2">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="icon" Text="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}"
+                                           FontSize="18" VerticalAlignment="Center" Margin="0,0,12,0"
+                                           Foreground="{TemplateBinding Foreground}"/>
+                                <TextBlock x:Name="label" Text="{TemplateBinding Content}"
+                                           VerticalAlignment="Center"
+                                           Foreground="{TemplateBinding Foreground}"/>
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#1F2937"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#1E1B4B"/>
+                                <Setter Property="Foreground" Value="#A78BFA"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar -->
+        <Border Grid.Column="0" Background="#0F172A" Padding="8,16">
+            <DockPanel>
+                <!-- App Logo / Title -->
+                <StackPanel DockPanel.Dock="Top" Margin="12,4,12,24">
+                    <TextBlock Text="🛡" FontSize="28" HorizontalAlignment="Center"/>
+                    <TextBlock Text="FocusGuard" FontSize="20" FontWeight="Bold"
+                               Foreground="White" HorizontalAlignment="Center" Margin="0,6,0,0"/>
+                    <TextBlock Text="Focus &amp; Eye Care" FontSize="11"
+                               Foreground="#6B7280" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                </StackPanel>
+
+                <!-- Bottom Section -->
+                <StackPanel DockPanel.Dock="Bottom" Margin="4,0,4,8">
+                    <Separator Background="#1F2937" Margin="0,8"/>
+                    <Button Cursor="Hand" Margin="4,2"
+                            Command="{Binding ShowGuideCommand}">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="border" Background="Transparent" CornerRadius="10"
+                                        Padding="16,12">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="📖" FontSize="18" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                        <TextBlock Text="Quick Guide" Foreground="#9CA3AF" FontSize="14" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="border" Property="Background" Value="#1F2937"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <TextBlock Text="v1.0.0" Foreground="#4B5563" FontSize="11"
+                               HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                </StackPanel>
+
+                <!-- Navigation Items -->
+                <StackPanel Margin="4,0">
+                    <RadioButton Style="{StaticResource NavButton}" Content="Timer" Tag="⏱"
+                                 IsChecked="True"
+                                 Command="{Binding NavigateCommand}" CommandParameter="Timer"/>
+                    <RadioButton Style="{StaticResource NavButton}" Content="Statistics" Tag="📊"
+                                 Command="{Binding NavigateCommand}" CommandParameter="Stats"/>
+                    <RadioButton Style="{StaticResource NavButton}" Content="Settings" Tag="⚙"
+                                 Command="{Binding NavigateCommand}" CommandParameter="Settings"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- Content Area -->
+        <Border Grid.Column="1" Padding="30,20" Background="#111827">
+            <ContentControl Content="{Binding CurrentPage}">
+                <ContentControl.Resources>
+                    <DataTemplate DataType="{x:Type vm:TimerViewModel}">
+                        <views:TimerView/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type vm:StatsViewModel}">
+                        <views:StatsView/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+                        <views:SettingsView/>
+                    </DataTemplate>
+                </ContentControl.Resources>
+            </ContentControl>
+        </Border>
+    </Grid>
+</Window>
