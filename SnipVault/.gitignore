@@ -1,0 +1,14 @@
+bin/
+obj/
+*.user
+*.suo
+*.cache
+.vs/
+packages/
+*.nupkg
+[Dd]ebug/
+[Rr]elease/
+Thumbs.db
+.DS_Store
+desktop.ini
+.idea/
